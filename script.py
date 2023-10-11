@@ -37,10 +37,9 @@ print("Matrice des poids (films classés) : \n", W)
 print("Matrice des coefficients (goûts des individus) : \n", H)
 print("Matrice X reconstruite : \n", X_nmf)
 
-
 # On calcule l'erreur de prediction pour nmf
 error_nmf = np.sqrt(np.mean((X - X_nmf)**2))
-error_nmf
+print("Erreur de prédiction pour NMF : \n", error_nmf)
 
 #%% 
 # Méthode SVD (https://numpy.org/doc/stable/reference/generated/numpy.linalg.svd.html)
@@ -48,40 +47,32 @@ import numpy as np
 
 U, D, V = np.linalg.svd(X, full_matrices=False)
 
-# Check that left singular matrix is orthonornal (unitary)
-np.set_printoptions(precision=3, suppress=True)
-print(U @ U.transpose())
-
-# Check that left singular matrix is orthonornal (unitary)
-np.set_printoptions(precision=3, suppress=True)
-print(V @ V.transpose())
-
-
-# Reconstruct the original matrix using the SVD components
+# On reconstruit la matrice X à partir des composantes SVD
 X_svd = U @ np.diag(D) @ V
 
-
-print("Reconstructed matrix using SVD:\n", X_svd)
+print("Matrice reconstruite à l'aide de SVD :\n", X_svd)
 error_svd = np.sqrt(np.mean((X - X_svd)**2))
-error_svd
+print("Erreur de prédiction pour la méthode SVD :\n", error_svd)
 
 #%%
 # Méthode de complétion de matrice (https://pypi.org/project/fancyimpute/)
 
-from fancyimpute import NuclearNormMinimization
+#import os
+#os.environ["PATH"] += os.pathsep + "C:/Users/sarah/anaconda3/Lib/site-packages/cvxopt/.libs"
 
+from fancyimpute import NuclearNormMinimization
+import cvxopt
 df2 = pd.DataFrame(data)
 X2 = df2.values[:, 1:]
-# Replace missing values with NaN
+
+# On remplace les données manquantes par Nan
 X2[X2 == "na"] = np.nan
 
-#%%
-# matrix completion using convex optimization to find low-rank solution
-# that still matches observed values. Slow!
+# On applique la méthode de complétion de matrice en utilisant la méthode de minimisation de la norme nucléaire.
 X_filled_nnm = NuclearNormMinimization().fit_transform(X2)
 
-nnm_mse = ((X_filled_nnm - X) ** 2).mean()
-print("Nuclear norm minimization MSE: %f" % nnm_mse)
+nnm_mse = np.sqrt(np.mean((X - X_filled_nnm) ** 2))
+print("Erreur de prédiction pour la méthode de complétion de matrice: %f" % nnm_mse)
 
 
 
@@ -95,4 +86,4 @@ print("Nuclear norm minimization MSE: %f" % nnm_mse)
 
 
 
-# %%
+
