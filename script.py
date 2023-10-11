@@ -43,10 +43,10 @@ error_nmf = np.sqrt(np.mean((X - X_nmf)**2))
 error_nmf
 
 #%% 
-# Méthode SVD (https://scicoding.com/how-to-calculate-singular-value-decomposition-svd-in-python/)
+# Méthode SVD (https://numpy.org/doc/stable/reference/generated/numpy.linalg.svd.html)
 import numpy as np
 
-U, D, V = np.linalg.svd(X)
+U, D, V = np.linalg.svd(X, full_matrices=False)
 
 # Check that left singular matrix is orthonornal (unitary)
 np.set_printoptions(precision=3, suppress=True)
@@ -56,9 +56,9 @@ print(U @ U.transpose())
 np.set_printoptions(precision=3, suppress=True)
 print(V @ V.transpose())
 
-#X = U @ np.diag(D) @ V.transpose()
+
 # Reconstruct the original matrix using the SVD components
-X_svd = U[:, :len(D)] @ np.diag(D) @ V.transpose()
+X_svd = U @ np.diag(D) @ V
 
 
 print("Reconstructed matrix using SVD:\n", X_svd)
@@ -75,6 +75,7 @@ X2 = df2.values[:, 1:]
 # Replace missing values with NaN
 X2[X2 == "na"] = np.nan
 
+#%%
 # matrix completion using convex optimization to find low-rank solution
 # that still matches observed values. Slow!
 X_filled_nnm = NuclearNormMinimization().fit_transform(X2)
@@ -91,3 +92,7 @@ print("Nuclear norm minimization MSE: %f" % nnm_mse)
 
 
 
+
+
+
+# %%
