@@ -74,16 +74,3 @@ X_filled_nnm = NuclearNormMinimization().fit_transform(X2)
 nnm_mse = np.sqrt(np.mean((X - X_filled_nnm) ** 2))
 print("Erreur de prédiction pour la méthode de complétion de matrice: %f" % nnm_mse)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
