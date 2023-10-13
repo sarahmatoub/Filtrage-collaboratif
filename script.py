@@ -2,7 +2,6 @@
 import numpy as np
 from sklearn.decomposition import NMF
 
-
 # Chaque ligne représente les notes données par un individu à chaque film
 import pandas as pd
 
@@ -17,7 +16,7 @@ df = pd.DataFrame(data)
 
 # Application de la méthode de factorisation par matrices non-négatives (NMF)
 
-# Remplacer les donnees manquantes par des 0
+# On remplace les données manquantes par des 0
 df = df.replace("na", 0)
 
 # On définit la matrice X
@@ -42,7 +41,7 @@ error_nmf = np.sqrt(np.mean((X - X_nmf)**2))
 print("Erreur de prédiction pour NMF : \n", error_nmf)
 
 #%% 
-# Méthode SVD (https://numpy.org/doc/stable/reference/generated/numpy.linalg.svd.html)
+# Application de la méthode SVD (https://numpy.org/doc/stable/reference/generated/numpy.linalg.svd.html)
 import numpy as np
 
 U, D, V = np.linalg.svd(X, full_matrices=False)
@@ -55,7 +54,7 @@ error_svd = np.sqrt(np.mean((X - X_svd)**2))
 print("Erreur de prédiction pour la méthode SVD :\n", error_svd)
 
 #%%
-# Méthode de complétion de matrice (https://pypi.org/project/fancyimpute/)
+# Application de la méthode de complétion de matrice (https://pypi.org/project/fancyimpute/)
 
 #import os
 #os.environ["PATH"] += os.pathsep + "C:/Users/sarah/anaconda3/Lib/site-packages/cvxopt/.libs"
